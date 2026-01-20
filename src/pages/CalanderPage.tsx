@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
-import { getLeads, getUsers, getActivities } from '@/data/dummyData';
+import { getLeads, getUsers, getActivities, getMeetings } from '@/data/dummyData';
 import { StatCard } from '@/components/shared/StatCard';
 import { Calendar } from '@/components/ui/calendar';
 import { LeadCard } from '@/components/leads/LeadCard';
@@ -37,14 +37,15 @@ const meetingTypeColors = {
 export default function CalendarPage() {
   const { user } = useAuth();
   const leads = getLeads();
+  const meetings = getMeetings();
   const users = getUsers();
    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
-  const selectedDateMeetings = mockMeetings.filter(meeting => 
+  const selectedDateMeetings = meetings.filter(meeting => 
     selectedDate && isSameDay(parseISO(meeting.date), selectedDate)
   );
 
-  const meetingDates = mockMeetings.map(m => parseISO(m.date));
+  const meetingDates = meetings.map(m => parseISO(m.date));
 
   return (
     <AppLayout

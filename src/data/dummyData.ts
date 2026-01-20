@@ -470,10 +470,21 @@ export const mockMeetings: any[] = [
 // Add meeting function
 export const addMeeting = (meeting: Omit<typeof mockMeetings[0], 'id'>): typeof mockMeetings[0] => {
   const meetings = getMeetings();
+  
+  // Generate proper lead name if not provided
+  let leadName = meeting.leadName;
+  if (!leadName && meeting.leadId) {
+    const leads = getLeads();
+    const lead = leads.find(l => l.id === meeting.leadId);
+    leadName = lead?.name || 'Unknown Lead';
+  }
+  
   const newMeeting = {
     ...meeting,
     id: `meeting-${Date.now()}`,
+    leadName: leadName,
   };
+  
   meetings.push(newMeeting);
   saveMeetings(meetings);
   return newMeeting;

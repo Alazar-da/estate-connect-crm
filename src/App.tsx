@@ -17,6 +17,9 @@ import PerformancePage from "@/pages/PerformancePage";
 import ReportsPage from "@/pages/ReportsPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import NotFound from "@/pages/NotFound";
+import CalendarPage from "./pages/CalanderPage";
+import PropertyPage from "./pages/Properties";
+
 
 const queryClient = new QueryClient();
 
@@ -56,6 +59,24 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={['super_admin', 'sales_supervisor']}>
                   <LeadsPage />
+                </ProtectedRoute>
+              }
+            />
+
+               <Route
+              path="/calendar"
+              element={
+                <ProtectedRoute allowedRoles={['super_admin', 'sales_supervisor']}>
+                  <CalendarPage />
+                </ProtectedRoute>
+              }
+            />
+
+                <Route
+              path="/properties"
+              element={
+                <ProtectedRoute allowedRoles={['super_admin', 'sales_supervisor']}>
+                  <PropertyPage />
                 </ProtectedRoute>
               }
             />

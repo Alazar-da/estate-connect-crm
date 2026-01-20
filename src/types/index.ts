@@ -8,7 +8,8 @@ export type PropertyInterest = 'buy' | 'rent';
 
 export type LeadSource = 'website' | 'referral' | 'call' | 'social' | 'other';
 
-export type ActivityType = 'call' | 'meeting' | 'comment' | 'status_change' | 'follow_up';
+export type ActivityType = 'call' | 'meeting' | 'comment' | 'status_change' | 'follow_up' | 'file_sent';
+export type PropertyType = 'house' | 'apartment' | 'condo' | 'townhouse' | 'land' | 'commercial';
 
 export interface User {
   id: string;
@@ -39,6 +40,28 @@ export interface Lead {
   updatedAt: string;
 }
 
+export interface Property {
+  id: string;
+  title: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  price: number;
+  type: PropertyType;
+  bedrooms: number;
+  bathrooms: number;
+  sqft: number;
+  yearBuilt: number;
+  status: 'active' | 'pending' | 'sold' | 'off_market';
+  images: string[];
+  mlsNumber?: string;
+  description: string;
+  features: string[];
+  listedDate: string;
+  agent: string;
+}
+
 export interface Activity {
   id: string;
   leadId: string;
@@ -47,6 +70,8 @@ export interface Activity {
   description: string;
   date: string;
   duration?: number; // in minutes, for calls and meetings
+  meetingId?: string; // For meetings
+
 }
 
 export interface Assignment {

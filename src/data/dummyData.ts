@@ -290,17 +290,7 @@ const STORAGE_KEYS = {
   CURRENT_USER: 'crm_current_user',
 };
 
-export const initializeData = () => {
-  if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.LEADS)) {
-    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(leads));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.ACTIVITIES)) {
-    localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify(activities));
-  }
-};
+
 
 export const getUsers = (): User[] => {
   const data = localStorage.getItem(STORAGE_KEYS.USERS);
@@ -417,3 +407,244 @@ export const deleteUser = (id: string): boolean => {
   saveUsers(filtered);
   return true;
 };
+
+
+
+
+export const mockMeetings: any[] = [
+  {
+    id: '1',
+    title: 'Property Showing - Beverly Hills Estate',
+    leadId: '1',
+    leadName: 'Michael Chen',
+    propertyId: '1',
+    propertyAddress: '1234 Sunset Boulevard',
+    date: '2024-01-20',
+    time: '10:00',
+    duration: 60,
+    type: 'showing',
+    status: 'scheduled',
+    agent: 'Sarah Johnson'
+  },
+  {
+    id: '2',
+    title: 'Contract Review',
+    leadId: '2',
+    leadName: 'Emily Rodriguez',
+    propertyId: '2',
+    propertyAddress: '567 Grand Avenue, Unit PH1',
+    date: '2024-01-20',
+    time: '14:00',
+    duration: 90,
+    type: 'closing',
+    status: 'scheduled',
+    agent: 'Sarah Johnson'
+  },
+  {
+    id: '3',
+    title: 'Initial Consultation',
+    leadId: '3',
+    leadName: 'David Thompson',
+    date: '2024-01-21',
+    time: '11:00',
+    duration: 45,
+    type: 'consultation',
+    status: 'scheduled',
+    agent: 'James Wilson'
+  },
+  {
+    id: '4',
+    title: 'Follow-up Call',
+    leadId: '4',
+    leadName: 'Jennifer Park',
+    date: '2024-01-22',
+    time: '15:30',
+    duration: 30,
+    type: 'follow_up',
+    status: 'scheduled',
+    agent: 'Maria Garcia'
+  },
+];
+
+
+// Add meeting function
+export const addMeeting = (meeting: Omit<typeof mockMeetings[0], 'id'>): typeof mockMeetings[0] => {
+  const meetings = getMeetings();
+  
+  // Generate proper lead name if not provided
+  let leadName = meeting.leadName;
+  if (!leadName && meeting.leadId) {
+    const leads = getLeads();
+    const lead = leads.find(l => l.id === meeting.leadId);
+    leadName = lead?.name || 'Unknown Lead';
+  }
+  
+  const newMeeting = {
+    ...meeting,
+    id: `meeting-${Date.now()}`,
+    leadName: leadName,
+  };
+  
+  meetings.push(newMeeting);
+  saveMeetings(meetings);
+  return newMeeting;
+};
+
+// Helper functions to manage meetings in localStorage
+const MEETINGS_STORAGE_KEY = 'crm_meetings';
+
+export const getMeetings = (): any[] => {
+  const data = localStorage.getItem(MEETINGS_STORAGE_KEY);
+  if (data) {
+    return JSON.parse(data);
+  } else {
+    // Initialize with mock meetings if none exist
+    saveMeetings(mockMeetings);
+    return mockMeetings;
+  }
+};
+
+export const saveMeetings = (meetings: any[]) => {
+  localStorage.setItem(MEETINGS_STORAGE_KEY, JSON.stringify(meetings));
+};
+
+// Also update initializeData function to include meetings initialization
+export const initializeData = () => {
+  if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+  }
+  if (!localStorage.getItem(STORAGE_KEYS.LEADS)) {
+    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(leads));
+  }
+  if (!localStorage.getItem(STORAGE_KEYS.ACTIVITIES)) {
+    localStorage.setItem(STORAGE_KEYS.ACTIVITIES, JSON.stringify(activities));
+  }
+  if (!localStorage.getItem(MEETINGS_STORAGE_KEY)) {
+    localStorage.setItem(MEETINGS_STORAGE_KEY, JSON.stringify(mockMeetings));
+  }
+};
+
+// Optional: Add functions for updating and deleting meetings
+export const updateMeeting = (id: string, updates: Partial<typeof mockMeetings[0]>): typeof mockMeetings[0] | null => {
+  const meetings = getMeetings();
+  const index = meetings.findIndex(m => m.id === id);
+  if (index === -1) return null;
+  
+  meetings[index] = {
+    ...meetings[index],
+    ...updates,
+  };
+  saveMeetings(meetings);
+  return meetings[index];
+};
+
+export const deleteMeeting = (id: string): boolean => {
+  const meetings = getMeetings();
+  const filtered = meetings.filter(m => m.id !== id);
+  if (filtered.length === meetings.length) return false;
+  saveMeetings(filtered);
+  return true;
+};
+
+// Optional: Get meetings by agent ID
+export const getMeetingsByAgent = (agentId: string): any[] => {
+  const meetings = getMeetings();
+  // Assuming the 'agent' field contains the agent's name or ID
+  // You might need to adjust this based on your data structure
+  return meetings.filter(meeting => meeting.agent === agentId || meeting.agentId === agentId);
+};
+
+// Optional: Get meetings by lead ID
+export const getMeetingsByLead = (leadId: string): any[] => {
+  const meetings = getMeetings();
+  return meetings.filter(meeting => meeting.leadId === leadId);
+};
+
+
+
+export const mockProperties:any[] = [
+  {
+    id: '1',
+    title: 'Abay Homes Downtown',
+    address: 'African Union Headquarters',
+    city: 'Addis Ababa',
+    state: 'AA',
+    zipCode: '1000',
+    price: 2450000,
+    type: 'house',
+    bedrooms: 5,
+    bathrooms: 4,
+    sqft: 4200,
+    yearBuilt: 2019,
+    status: 'active',
+    images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800'],
+    mlsNumber: 'MLS-2024-001',
+    description: 'Stunning modern estate with panoramic city views',
+    features: ['Pool', 'Smart Home', 'Wine Cellar', 'Home Theater'],
+    listedDate: '2024-01-10',
+    agent: 'Sarah Johnson'
+  },
+  {
+    id: '2',
+     title: 'Abay Homes Complex',
+  address: 'African Union Headquarters',
+    city: 'Addis Ababa',
+    state: 'AA',
+    zipCode: '1000',
+    price: 1850000,
+    type: 'condo',
+    bedrooms: 3,
+    bathrooms: 3,
+    sqft: 2800,
+    yearBuilt: 2021,
+    status: 'pending',
+    images: ['https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800'],
+    mlsNumber: 'MLS-2024-002',
+    description: 'Ultra-modern penthouse with 360-degree views',
+    features: ['Rooftop Access', 'Concierge', 'Gym', 'Valet Parking'],
+    listedDate: '2024-01-05',
+    agent: 'Sarah Johnson'
+  },
+  {
+    id: '3',
+    title: 'Abay Homes Complex2',
+    address: 'African Union Headquarters',
+    city: 'Addis Ababa',
+    state: 'AA',
+    zipCode: '1000',
+    price: 895000,
+    type: 'house',
+    bedrooms: 4,
+    bathrooms: 2,
+    sqft: 2400,
+    yearBuilt: 1925,
+    status: 'active',
+    images: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800'],
+    mlsNumber: 'MLS-2024-003',
+    description: 'Beautifully restored craftsman with original details',
+    features: ['Original Woodwork', 'Garden', 'Updated Kitchen', 'Detached Garage'],
+    listedDate: '2024-01-15',
+    agent: 'Maria Garcia'
+  },
+  {
+    id: '4',
+  title: 'Abay Homes Complex3',
+  address: 'African Union Headquarters',
+    city: 'Addis Ababa',
+    state: 'AA',
+    zipCode: '1000',
+    price: 1250000,
+    type: 'condo',
+    bedrooms: 2,
+    bathrooms: 2,
+    sqft: 1600,
+    yearBuilt: 2018,
+    status: 'active',
+    images: ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800'],
+    mlsNumber: 'MLS-2024-004',
+    description: 'Steps from the beach with stunning ocean views',
+    features: ['Ocean View', 'Balcony', 'Parking', 'Fitness Center'],
+    listedDate: '2024-01-12',
+    agent: 'James Wilson'
+  },
+];

@@ -120,7 +120,7 @@ export function AppSidebar() {
           {!isCollapsed && (
             <div className="flex flex-col">
               <span className="text-lg font-bold text-sidebar-foreground">
-                EstateFlow
+                Abay Homes
               </span>
               <span className="text-xs text-sidebar-foreground/60">
                 Real Estate CRM

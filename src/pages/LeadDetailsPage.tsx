@@ -8,6 +8,7 @@ import {
   getActivities,
   updateLead,
   addActivity,
+  addMeeting
 } from '@/data/dummyData';
 import { Lead, Activity, LeadStatus } from '@/types';
 import { StatusBadge } from '@/components/shared/StatusBadge';
@@ -36,9 +37,13 @@ import {
   PhoneCall,
   Users,
   Send,
+  CalendarPlus2,
+  File,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { MeetingPopup } from '@/components/meetings/MeetingPopup';
+import { FileSendPopup } from '@/components/files/FileSendPopup';
 
 export default function LeadDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -50,6 +55,97 @@ export default function LeadDetailsPage() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [newComment, setNewComment] = useState('');
   const [newStatus, setNewStatus] = useState<LeadStatus | ''>('');
+  const [showMeetingPopup, setShowMeetingPopup] = useState(false);
+  const [showFileSendPopup, setShowFileSendPopup] = useState(false);
+
+// Add these handler functions:
+const handleScheduleMeeting = () => {
+  setShowMeetingPopup(true);
+};
+
+const handleSendFile = () => {
+  setShowFileSendPopup(true);
+};
+
+const handleFileSubmit = async (fileData: any) => {
+  if (!lead || !user) return;
+
+  try {
+    // Add activity log for file sending
+    addActivity({
+      leadId: lead.id,
+      userId: user.id,
+      type: 'file_sent', // You might need to add this type to your Activity type
+      description: `Sent ${fileData.fileType} file: ${fileData.fileName}. ${fileData.description}`,
+      date: new Date().toISOString(),
+  
+    });
+
+    // Update local activities state
+    setActivities(getActivities().filter((a) => a.leadId === id));
+
+    toast({
+      title: 'File Sent',
+      description: `${fileData.fileName} has been sent to ${lead.name}`,
+    });
+
+    setShowFileSendPopup(false);
+  } catch (error) {
+    toast({
+      title: 'Error',
+      description: 'Failed to send file. Please try again.',
+      variant: 'destructive',
+    });
+  }
+};
+
+const handleMeetingSubmit = async (meetingData: any) => {
+  if (!lead || !user) return;
+
+  try {
+    // 1. Add the meeting using addMeeting function
+    const newMeeting = addMeeting({
+      title: meetingData.title,
+      leadId: lead.id,
+      leadName: lead.name,
+      propertyId: meetingData.propertyId,
+      propertyAddress: meetingData.propertyAddress,
+      date: meetingData.date,
+      time: meetingData.time,
+      duration: meetingData.duration,
+      type: meetingData.type,
+      status: 'scheduled',
+      agent: user.name, // or user.id depending on your data structure
+      agentId: user.id,
+    });
+
+    // 2. Add activity log for the meeting
+    addActivity({
+      leadId: lead.id,
+      userId: user.id,
+      type: 'meeting',
+      description: `Scheduled ${meetingData.type} meeting: ${meetingData.title}`,
+      date: new Date().toISOString(),
+      duration: meetingData.duration,
+      meetingId: newMeeting.id, // You might want to add this field to Activity type
+    });
+
+    // 3. Update local activities state
+    setActivities(getActivities().filter((a) => a.leadId === id));
+
+    toast({
+      title: 'Meeting Scheduled',
+      description: `Meeting with ${lead.name} has been scheduled successfully.`,
+    });
+
+  } catch (error) {
+    toast({
+      title: 'Error',
+      description: 'Failed to schedule meeting. Please try again.',
+      variant: 'destructive',
+    });
+  }
+};
 
   const users = getUsers();
 
@@ -123,12 +219,13 @@ export default function LeadDetailsPage() {
       leadId: lead.id,
       userId: user.id,
       type: 'call',
-      description: 'Phone call with client',
+      description: newComment || 'Call made to client',
       date: new Date().toISOString(),
       duration: 15,
     });
 
     setActivities(getActivities().filter((a) => a.leadId === id));
+        setNewComment('');
 
     toast({
       title: 'Call logged',
@@ -149,6 +246,7 @@ export default function LeadDetailsPage() {
     });
 
     setActivities(getActivities().filter((a) => a.leadId === id));
+        setNewComment('');
 
     toast({
       title: 'Meeting logged',
@@ -194,6 +292,8 @@ export default function LeadDetailsPage() {
   }
 
   return (
+    <>
+   
     <AppLayout title="Lead Details" subtitle={lead.name}>
       <div className="space-y-6">
         {/* Header */}
@@ -289,24 +389,33 @@ export default function LeadDetailsPage() {
                     onChange={(e) => setNewComment(e.target.value)}
                     className="mb-3"
                   />
-                  <div className="flex gap-2">
-                    <Button
-                      onClick={handleAddComment}
-                      disabled={!newComment.trim()}
-                      className="gradient-primary"
-                    >
-                      <Send className="mr-2 h-4 w-4" />
-                      Add Comment
-                    </Button>
-                    <Button variant="outline" onClick={handleLogCall}>
-                      <PhoneCall className="mr-2 h-4 w-4" />
-                      Log Call
-                    </Button>
-                    <Button variant="outline" onClick={handleLogMeeting}>
-                      <Calendar className="mr-2 h-4 w-4" />
-                      Log Meeting
-                    </Button>
-                  </div>
+               <div className="flex gap-2">
+  <Button
+    onClick={handleAddComment}
+    disabled={!newComment.trim()}
+    className="gradient-primary"
+  >
+    <Send className="mr-2 h-4 w-4" />
+    Add Comment
+  </Button>
+  <Button variant="outline" onClick={handleLogCall}>
+    <PhoneCall className="mr-2 h-4 w-4" />
+    Log Call
+  </Button>
+  <Button variant="outline" onClick={handleScheduleMeeting}>
+    <CalendarPlus2 className="mr-2 h-4 w-4" />
+    Schedule Meeting
+  </Button>
+  <Button variant="outline" onClick={handleLogMeeting}>
+    <Calendar className="mr-2 h-4 w-4" />
+    Log Meeting
+  </Button>
+  {/* Add the Send File button */}
+  <Button variant="outline" onClick={handleSendFile}>
+    <File className="mr-2 h-4 w-4" />
+    Send File
+  </Button>
+</div>
                 </div>
 
                 {/* Timeline */}
@@ -454,6 +563,32 @@ export default function LeadDetailsPage() {
           </div>
         </div>
       </div>
+
+      
     </AppLayout>
+
+    {showMeetingPopup && lead && user && (
+  <MeetingPopup
+    isOpen={showMeetingPopup}
+    onClose={() => setShowMeetingPopup(false)}
+    leadId={lead.id}
+    leadName={lead.name}
+    onSubmit={handleMeetingSubmit}
+    userId={user.id}
+  />
+)}
+
+{showFileSendPopup && lead && user && (
+  <FileSendPopup
+    isOpen={showFileSendPopup}
+    onClose={() => setShowFileSendPopup(false)}
+    leadId={lead.id}
+    leadName={lead.name}
+    onSubmit={handleFileSubmit}
+    userId={user.id}
+  />
+)}
+
+     </>
   );
 }

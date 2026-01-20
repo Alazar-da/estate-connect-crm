@@ -5,11 +5,13 @@ import {
   UserPlus,
   FileText,
   Building2,
+  Building,
   ClipboardList,
   BarChart3,
   UserCog,
   LogOut,
   ChevronRight,
+  Calendar
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
@@ -49,18 +51,32 @@ const navItems: NavItem[] = [
     icon: ClipboardList,
     roles: ['super_admin', 'sales_supervisor'],
   },
+   {
+    title: 'Create Lead',
+    url: '/leads/new',
+    icon: UserPlus,
+    roles: ['super_admin', 'sales_supervisor'],
+  },
+   {
+    title: 'Calendar',
+    url: '/calendar',
+    icon: Calendar,
+    roles: ['super_admin', 'sales_supervisor'],
+  },
+
+    {
+    title: 'Properties',
+    url: '/properties',
+    icon: Building,
+    roles: ['super_admin', 'sales_supervisor'],
+  },
   {
     title: 'My Leads',
     url: '/my-leads',
     icon: FileText,
     roles: ['sales_agent'],
   },
-  {
-    title: 'Create Lead',
-    url: '/leads/new',
-    icon: UserPlus,
-    roles: ['super_admin', 'sales_supervisor'],
-  },
+ 
   {
     title: 'Team Performance',
     url: '/performance',

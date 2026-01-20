@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
@@ -17,7 +17,7 @@
     --popover-foreground: 220 20% 15%;
 
     /* Deep Emerald - Trust & Growth */
-    --primary: 160 45% 25%;
+    --primary: 164 60% 35%;
     --primary-foreground: 40 33% 98%;
 
     /* Warm Gold - Luxury & Premium */
@@ -36,7 +36,7 @@
 
     --border: 40 15% 88%;
     --input: 40 15% 88%;
-    --ring: 160 45% 25%;
+    --ring: 164 60% 42%;
 
     --radius: 0.75rem;
 
@@ -54,21 +54,29 @@
     --priority-low: 160 45% 35%;
 
     /* Sidebar */
-    --sidebar-background: 160 45% 20%;
+    --sidebar-background: 195 90% 10%;
+    --sidebar-accent: 195 45% 18%;
+    --sidebar-border: 160 35% 30%;
     --sidebar-foreground: 40 33% 95%;
     --sidebar-primary: 38 70% 55%;
     --sidebar-primary-foreground: 220 20% 15%;
-    --sidebar-accent: 160 40% 28%;
     --sidebar-accent-foreground: 40 33% 95%;
-    --sidebar-border: 160 35% 25%;
-    --sidebar-ring: 38 70% 55%;
+     --sidebar-ring: 164 60% 42%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(160 45% 25%), hsl(160 50% 30%));
-    --gradient-secondary: linear-gradient(135deg, hsl(38 70% 55%), hsl(38 75% 60%));
+        --gradient-primary: linear-gradient(
+      135deg,
+      hsl(164 60% 42%),
+      hsl(164 65% 48%)
+    );
+        --gradient-hero: linear-gradient(
+      135deg,
+      hsl(195 97% 11%),
+      hsl(164 60% 40%),
+      hsl(38 60% 45%)
+    );  --gradient-secondary: linear-gradient(135deg, hsl(38 70% 55%), hsl(38 75% 60%));
     --gradient-accent: linear-gradient(135deg, hsl(16 65% 55%), hsl(16 70% 60%));
-    --gradient-hero: linear-gradient(135deg, hsl(160 45% 22%), hsl(160 50% 28%), hsl(38 60% 45%));
-
+    
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(220 20% 15% / 0.05);
     --shadow-md: 0 4px 6px -1px hsl(220 20% 15% / 0.08), 0 2px 4px -1px hsl(220 20% 15% / 0.04);
@@ -88,7 +96,7 @@
     --popover: 220 20% 13%;
     --popover-foreground: 40 20% 95%;
 
-    --primary: 160 50% 45%;
+    --primary: 160 50% 48%;
     --primary-foreground: 220 20% 10%;
 
     --secondary: 38 65% 50%;
@@ -105,7 +113,7 @@
 
     --border: 220 15% 22%;
     --input: 220 15% 22%;
-    --ring: 160 50% 45%;
+    --ring: 160 50% 48%;
 
     --sidebar-background: 220 20% 8%;
     --sidebar-foreground: 40 20% 95%;

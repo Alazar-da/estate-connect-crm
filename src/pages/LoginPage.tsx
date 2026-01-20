@@ -29,7 +29,7 @@ export default function LoginPage() {
     if (result.success) {
       toast({
         title: 'Welcome back!',
-        description: 'Successfully logged in to EstateFlow.',
+        description: 'Successfully logged in to Abay Homes CRM.',
       });
       navigate('/dashboard');
     } else {
@@ -67,7 +67,7 @@ export default function LoginPage() {
               <Building2 className="h-6 w-6" />
             </div>
             <div>
-              <span className="text-2xl font-bold">EstateFlow</span>
+              <span className="text-2xl font-bold">Abay Homes</span>
               <p className="text-sm text-white/70">Real Estate CRM</p>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function LoginPage() {
 
           {/* Footer */}
           <p className="text-sm text-white/50">
-            © 2024 EstateFlow. All rights reserved.
+            © 2024 Abay Homes. All rights reserved.
           </p>
         </div>
       </div>
@@ -114,7 +114,7 @@ export default function LoginPage() {
             <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-primary">
               <Building2 className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-bold text-foreground">EstateFlow</span>
+            <span className="text-2xl font-bold text-foreground">Abay Homes</span>
           </div>
 
           <div className="text-center lg:text-left">

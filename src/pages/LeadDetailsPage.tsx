@@ -378,7 +378,20 @@ const handleMeetingSubmit = async (meetingData: any) => {
             {/* Activity Timeline */}
             <Card className="border-0 shadow-card">
               <CardHeader>
+                <div className='flex justify-between items-center'>
+                
                 <CardTitle className="text-base">Activity Timeline</CardTitle>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={handleLogCall}>
+                    <PhoneCall className="mr-2 h-4 w-4" />
+                    Log Call
+                </Button>
+                <Button variant="outline" onClick={handleLogMeeting}>
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Log Meeting
+                </Button>
+                </div>
+                </div>
               </CardHeader>
               <CardContent>
                 {/* Add Comment */}
@@ -389,7 +402,7 @@ const handleMeetingSubmit = async (meetingData: any) => {
                     onChange={(e) => setNewComment(e.target.value)}
                     className="mb-3"
                   />
-               <div className="flex gap-2">
+               <div className="flex gap-2 justify-between">
   <Button
     onClick={handleAddComment}
     disabled={!newComment.trim()}
@@ -398,23 +411,18 @@ const handleMeetingSubmit = async (meetingData: any) => {
     <Send className="mr-2 h-4 w-4" />
     Add Comment
   </Button>
-  <Button variant="outline" onClick={handleLogCall}>
-    <PhoneCall className="mr-2 h-4 w-4" />
-    Log Call
-  </Button>
+<div className='flex gap-2'>
   <Button variant="outline" onClick={handleScheduleMeeting}>
     <CalendarPlus2 className="mr-2 h-4 w-4" />
     Schedule Meeting
   </Button>
-  <Button variant="outline" onClick={handleLogMeeting}>
-    <Calendar className="mr-2 h-4 w-4" />
-    Log Meeting
-  </Button>
+ 
   {/* Add the Send File button */}
   <Button variant="outline" onClick={handleSendFile}>
     <File className="mr-2 h-4 w-4" />
     Send File
   </Button>
+  </div>
 </div>
                 </div>
 

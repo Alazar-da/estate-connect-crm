@@ -95,7 +95,7 @@ export const FileSendPopup: React.FC<FileSendPopupProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <section className="fixed inset-0 z-50 overflow-y-auto text-xs">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
         <div 
@@ -233,25 +233,24 @@ export const FileSendPopup: React.FC<FileSendPopupProps> = ({
                 </div>
               </div>
             </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-between px-6 py-4 mt-6 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+             <div className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                 * Required fields
               </div>
-              <div className="flex gap-3">
-                <button
+
+            {/* Footer */}
+            <div className="flex items-center justify-between px-2 py-4 mt-6 bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl">
+
+                <Button
                   type="button"
                   onClick={onClose}
-                  className="px-6 py-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                >
+                  variant="outline"
+                  >
                   Cancel
-                </button>
-                <button
+                </Button>
+                 <Button
                   type="submit"
                   disabled={isSubmitting || !formData.fileName || !formData.description}
-                  className="px-6 py-2 bg-gradient-to-r from-green-700 to-green-600 text-white rounded-lg hover:from-green-800 hover:to-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
-                >
+                   className="gradient-primary" >
                   {isSubmitting ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
@@ -259,16 +258,16 @@ export const FileSendPopup: React.FC<FileSendPopupProps> = ({
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5 mr-2" />
+                      <Send className="mr-2 h-4 w-4" />
                       Send File
                     </>
                   )}
-                </button>
-              </div>
+                </Button>
+             
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
